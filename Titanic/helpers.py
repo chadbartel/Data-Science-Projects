@@ -15,10 +15,14 @@ titanic_dtypes = {
     'Embarked': Categorical(["C", "Q", "S"])
 }
 
-def get_training_data(filepath: str=None):
+def get_titanic_data(train_or_test: str='train'):
     """"""
-    if filepath is None:
+    if train_or_test == 'train':
         filepath = r'Titanic\Data\train.csv'
+    elif train_or_test == 'test':
+        filepath = r'Titanic\Data\test.csv'
+    else:
+        raise ValueError
     df = read_csv(
         filepath,
         index_col='PassengerId',
