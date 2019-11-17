@@ -31,3 +31,46 @@ def get_titanic_data(train_or_test: str='train'):
         dtype=titanic_dtypes
     )
     return df
+
+
+class Titanic:
+    """
+    Reads and organizes data from csv files.
+    """
+    def __init__(self, name: str):
+
+        # Read in data
+
+        self.name = name.lower()
+
+        self.dtypes_ = {
+            'PassengerId': int32,
+            'Survived': int32, 
+            'Pclass': int32, 
+            'Name': str,
+            'Sex': CategoricalDtype(["male", "female"]), 
+            'Age': float64, 
+            'SibSp': int32, 
+            'Parch': int32, 
+            'Ticket': str,
+            'Fare': float64, 
+            'Cabin': str,
+            'Embarked': CategoricalDtype(["C", "Q", "S"])
+        }
+
+        if name.find('train') > -1:
+            self.data = read_csv(
+                r'Titanic\Data\train.csv',
+                index_col='PassengerId',
+                usecols=list(self.dtypes_.keys()),
+                dtype=self.dtypes_
+            )
+        elif name.find('test') > -1:
+            self.data = read_csv(
+                r'Titanic\Data\test.csv',
+                index_col='PassengerId',
+                usecols=list(self.dtypes_.keys()),
+                dtype=self.dtypes_
+            )
+        else:
+            raise ValueError
