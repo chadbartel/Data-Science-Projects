@@ -3,3 +3,6 @@
 
 # Miscellaneous files
 test.py
+
+# Ignore byte code files
+*.pyc
