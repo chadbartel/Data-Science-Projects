@@ -16,4 +16,5 @@ Source: https://jasonicarter.github.io/survival-analysis-titanic-data/
     - Special values could lead to new questions related to target variable.
 7. Begin answering each question and interpret result of analysis.
     - If any assumptions made wrt each question, then it should be stated.
+    - If a feature needs to be engineered, then it should be put in a function.
 8. Summarize findings from each question and state conclusion.
