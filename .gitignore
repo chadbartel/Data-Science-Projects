@@ -4,5 +4,5 @@
 # Miscellaneous files
 test.py
 
-# Ignore byte code files
-*.pyc
+# Ignore pycache dirs
+__pycache__
