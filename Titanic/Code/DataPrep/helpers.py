@@ -19,9 +19,9 @@ titanic_dtypes = {
 def get_titanic_data(train_or_test: str='train'):
     """"""
     if train_or_test == 'train':
-        filepath = r'Titanic\Data\train.csv'
+        filepath = r'Titanic\Data\Raw\train.csv'
     elif train_or_test == 'test':
-        filepath = r'Titanic\Data\test.csv'
+        filepath = r'Titanic\Data\Raw\test.csv'
     else:
         raise ValueError
     df = read_csv(
@@ -60,14 +60,14 @@ class Titanic:
 
         if name.find('train') > -1:
             self.data = read_csv(
-                r'Titanic\Data\train.csv',
+                r'Titanic\Data\Raw\train.csv',
                 index_col='PassengerId',
                 usecols=list(self.dtypes_.keys()),
                 dtype=self.dtypes_
             )
         elif name.find('test') > -1:
             self.data = read_csv(
-                r'Titanic\Data\test.csv',
+                r'Titanic\Data\Raw\test.csv',
                 index_col='PassengerId',
                 usecols=list(self.dtypes_.keys()),
                 dtype=self.dtypes_
