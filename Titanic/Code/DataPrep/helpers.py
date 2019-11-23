@@ -84,4 +84,5 @@ class Titanic:
         if self.data is None:
             raise ValueError
 
-        pass
+        # Drop 'Ticket' column
+        self.data = self.data.drop(['Ticket'], axis=1)
