@@ -86,3 +86,6 @@ class Titanic:
 
         # Drop 'Ticket' column
         self.data = self.data.drop(['Ticket'], axis=1)
+
+        # Drop 'Cabin' column
+        self.data = self.data.drop(['Cabin'], axis=1)
