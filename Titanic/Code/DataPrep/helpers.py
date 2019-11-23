@@ -74,3 +74,14 @@ class Titanic:
             )
         else:
             raise ValueError
+
+    def clean_data(self):
+        """
+        Cleans Titanic data for issues identified in EDA.
+        """
+        
+        # Check data
+        if self.data is None:
+            raise ValueError
+
+        pass
