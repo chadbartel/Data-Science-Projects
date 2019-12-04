@@ -38,6 +38,8 @@ class Titanic:
     """
     Reads and organizes Titanic data from csv files.
     """
+
+
     def __init__(self, name: str=None):
         
         # Set datatypes
@@ -59,6 +61,7 @@ class Titanic:
         if name.lower().strip() in ['train', 'test']:
             # Valid name passed
             self.name = name.lower().strip()
+            
         else:
             # Invalid name passed
             self.name = None
@@ -91,12 +94,38 @@ class Titanic:
 
         return None
     
+
     def get_data(self, name: str=None):
         """
         Gets train/test Titanic data from csv.
         """
+        
+        if self.name is None and name.lower().strip() in ['train', 'test']:
+            # Valid name passed
+            self.name = name.lower().strip()
 
-        pass
+            # Get data
+            self.data = read_csv(
+                r'Titanic\Data\Raw\{}.csv'.format(self.name),
+                index_col='PassengerId',
+                usecols=list(self.dtypes_.keys()),
+                dtype=self.dtypes_
+            )
+        
+        elif self.name is not None and self.name in ['train', 'test']:
+            # Get data
+            self.data = read_csv(
+                r'Titanic\Data\Raw\{}.csv'.format(self.name),
+                index_col='PassengerId',
+                usecols=list(self.dtypes_.keys()),
+                dtype=self.dtypes_
+            )
+
+        else:
+            # Invalid name passed
+            raise ValueError
+
+        return None
 
 
     def clean_data(self):
@@ -104,17 +133,19 @@ class Titanic:
         Cleans Titanic data for issues identified in EDA.
         """
         
-        # Check data
         if self.data is None:
+            # No data in object
             return -1
 
-        # Drop 'Ticket' column
-        self.data = self.data.drop(['Ticket'], axis=1)
+        else:
+            # Drop 'Ticket' column
+            self.data = self.data.drop(['Ticket'], axis=1)
 
-        # Drop 'Cabin' column
-        self.data = self.data.drop(['Cabin'], axis=1)
+            # Drop 'Cabin' column
+            self.data = self.data.drop(['Cabin'], axis=1)
 
-        return None
+            return None
+
 
     def encode_labels(self, column: str, drop: bool=False):
         """
@@ -125,15 +156,18 @@ class Titanic:
         if column is None:
             # No column name passed
             raise ValueError
+
         elif not column in self.data.columns.tolist():
             # Column name does not exist
             raise ValueError
+
         else:
             new_column += column + '_Code'
         
         if self.data is None:
-            # There is no data
+            # No data in object
             raise ValueError
+
         else:
             # Encode labels in column
             encoder = LabelEncoder()
