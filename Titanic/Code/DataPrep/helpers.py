@@ -2,6 +2,7 @@
 
 from pandas import read_csv, CategoricalDtype
 from numpy import int32, float64
+from sklearn.preprocessing import LabelEncoder
 
 titanic_dtypes = {
     'PassengerId': int32,
