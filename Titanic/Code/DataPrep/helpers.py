@@ -38,12 +38,9 @@ class Titanic:
     """
     Reads and organizes Titanic data from csv files.
     """
-    def __init__(self, name: str):
-
-        # Read in data
-
-        self.name = name.lower().strip()
-
+    def __init__(self, name: str=None):
+        
+        # Set datatypes
         self.dtypes_ = {
             'PassengerId': int32,
             'Survived': int32, 
@@ -58,8 +55,15 @@ class Titanic:
             'Cabin': str,
             'Embarked': CategoricalDtype(["C", "Q", "S"])
         }
+        
+        if name.lower().strip() in ['train', 'test']:
+            # Valid name passed
+            self.name = name.lower().strip()
+        else:
+            # Invalid name passed
+            self.name = None
 
-        if self.name.find('train') > -1:
+        if self.name == 'train':
             # Get Titanic train data
             self.data = read_csv(
                 r'Titanic\Data\Raw\train.csv',
@@ -70,7 +74,7 @@ class Titanic:
             # Clean data
             self.clean_data()
 
-        elif self.name.find('test') > -1:
+        elif self.name == 'test':
             # Get Titanic test data
             self.data = read_csv(
                 r'Titanic\Data\Raw\test.csv',
@@ -82,8 +86,18 @@ class Titanic:
             self.clean_data()
         
         else:
-            # Invalid name passed
-            raise ValueError
+            # No data
+            self.data = None
+
+        return None
+    
+    def get_data(self, name: str=None):
+        """
+        Gets train/test Titanic data from csv.
+        """
+
+        pass
+
 
     def clean_data(self):
         """
@@ -99,3 +113,36 @@ class Titanic:
 
         # Drop 'Cabin' column
         self.data = self.data.drop(['Cabin'], axis=1)
+
+        return None
+
+    def encode_labels(self, column: str, drop: bool=False):
+        """
+        Encodes the labels in a column to integers.
+        """
+
+        new_column = ''
+        if column is None:
+            # No column name passed
+            raise ValueError
+        elif not column in self.data.columns.tolist():
+            # Column name does not exist
+            raise ValueError
+        else:
+            new_column += column + '_Code'
+        
+        if self.data is None:
+            # There is no data
+            raise ValueError
+        else:
+            # Encode labels in column
+            encoder = LabelEncoder()
+            self.data[new_column] = encoder.fit_transform(
+                self.data[column].astype(str)
+            )
+        
+        if drop:
+            # Drop encoded column
+            self.data = self.data.drop(column, axis='columns')
+        
+        return None
