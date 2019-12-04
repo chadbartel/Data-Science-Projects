@@ -35,13 +35,13 @@ def get_titanic_data(train_or_test: str='train'):
 
 class Titanic:
     """
-    Reads and organizes data from csv files.
+    Reads and organizes Titanic data from csv files.
     """
     def __init__(self, name: str):
 
         # Read in data
 
-        self.name = name.lower()
+        self.name = name.lower().strip()
 
         self.dtypes_ = {
             'PassengerId': int32,
@@ -58,21 +58,30 @@ class Titanic:
             'Embarked': CategoricalDtype(["C", "Q", "S"])
         }
 
-        if name.find('train') > -1:
+        if self.name.find('train') > -1:
+            # Get Titanic train data
             self.data = read_csv(
                 r'Titanic\Data\Raw\train.csv',
                 index_col='PassengerId',
                 usecols=list(self.dtypes_.keys()),
                 dtype=self.dtypes_
             )
-        elif name.find('test') > -1:
+            # Clean data
+            self.clean_data()
+
+        elif self.name.find('test') > -1:
+            # Get Titanic test data
             self.data = read_csv(
                 r'Titanic\Data\Raw\test.csv',
                 index_col='PassengerId',
                 usecols=list(self.dtypes_.keys()),
                 dtype=self.dtypes_
             )
+            # Clean data
+            self.clean_data()
+        
         else:
+            # Invalid name passed
             raise ValueError
 
     def clean_data(self):
@@ -82,7 +91,7 @@ class Titanic:
         
         # Check data
         if self.data is None:
-            raise ValueError
+            return -1
 
         # Drop 'Ticket' column
         self.data = self.data.drop(['Ticket'], axis=1)
