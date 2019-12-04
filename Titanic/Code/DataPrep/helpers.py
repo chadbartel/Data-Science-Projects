@@ -58,10 +58,14 @@ class Titanic:
             'Embarked': CategoricalDtype(["C", "Q", "S"])
         }
         
-        if name.lower().strip() in ['train', 'test']:
+        if not name:
+            # Invalid name passed
+            self.name = None
+
+        elif name.lower().strip() in ['train', 'test']:
             # Valid name passed
             self.name = name.lower().strip()
-            
+        
         else:
             # Invalid name passed
             self.name = None
