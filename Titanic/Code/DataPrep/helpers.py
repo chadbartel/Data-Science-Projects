@@ -78,8 +78,6 @@ class Titanic:
                 usecols=list(self.dtypes_.keys()),
                 dtype=self.dtypes_
             )
-            # Clean data
-            self.clean_data()
 
         elif self.name == 'test':
             # Get Titanic test data
@@ -89,8 +87,6 @@ class Titanic:
                 usecols=list(self.dtypes_.keys()),
                 dtype=self.dtypes_
             )
-            # Clean data
-            self.clean_data()
         
         else:
             # No data
