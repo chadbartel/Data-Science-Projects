@@ -3,6 +3,7 @@
 from pandas import read_csv, CategoricalDtype
 from numpy import int32, float64
 from sklearn.preprocessing import LabelEncoder
+from scipy.stats import ttest_ind
 
 from missingno import matrix
 from matplotlib.pyplot import tight_layout, show
@@ -171,9 +172,13 @@ class Titanic:
         return None
     
 
-    def test_for_mcar(self):
+    def test_for_mcar(self, column: str, alpha: float=0.05):
         """
         Conduct a 'simplified' Little's MCAR test on each missing column.
+            1. Calculate the mean of each column with missing data.
+            2. Calculate the mean of each column without missing data.
+            3. If a majority of the columns have same/similar means, then it 
+                is LIKELY the data is MCAR.
         """
         
         if self.data is None:
@@ -185,3 +190,18 @@ class Titanic:
             self.missing_columns = self.data.columns[
                 self.data.isnull().any()
             ].tolist()
+            
+        # Calculate t-test for missing column
+        if column in self.missing_columns:
+            _, p_value = ttest_ind(
+                a=self.data['Survived'],
+                b=self.data.loc[
+                    ~self.data[column].isnull(), 
+                    'Survived'
+                ]
+            )
+            
+            if p_value > alpha:
+                return True     # Can assume MCAR
+            else:
+                return False    # Cannot assume MCAR
