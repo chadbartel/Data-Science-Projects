@@ -93,10 +93,12 @@ class Titanic:
             return -1
 
         else:
-            # Drop 'Ticket' column
+            # Drop 'Ticket' column 
+            #   Does not add value, no valuable pattern found
             self.data = self.data.drop(['Ticket'], axis=1)
 
             # Drop 'Cabin' column
+            #   Too many missing values > 20%, impute inherently biased
             self.data = self.data.drop(['Cabin'], axis=1)
 
             return None
