@@ -172,6 +172,24 @@ class Titanic:
         return None
     
 
+    def get_missing_columns(self):
+        """
+        Update missing columns attribute.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+
+        else:
+            # Get list of missing columns in data
+            self.missing_columns = self.data.columns[
+                self.data.isnull().any()
+            ].tolist()
+        
+        return self.missing_columns
+    
+
     def test_for_mcar(self, column: str, alpha: float=0.05):
         """
         Conduct a 'simplified' Little's MCAR test on each missing column.
@@ -185,11 +203,9 @@ class Titanic:
             # No data in object
             raise ValueError
 
-        else:
-            # Get list of missing columns in data
-            self.missing_columns = self.data.columns[
-                self.data.isnull().any()
-            ].tolist()
+        if self.missing_columns == []:
+            # No columns in missing columns attribute
+            self.get_missing_columns()
             
         # Calculate t-test for missing column
         if column in self.missing_columns:
@@ -205,3 +221,6 @@ class Titanic:
                 return True     # Can assume MCAR
             else:
                 return False    # Cannot assume MCAR
+        
+        else:
+            raise ValueError
