@@ -224,3 +224,18 @@ class Titanic:
         
         else:
             raise ValueError
+    
+
+    def extract_title(self):
+        """
+        Parses the passenger's name for their title and creates a column.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+
+        self.data['Title'] = self.data['Name'].str.split(
+            ", ", expand=True)[1].str.split(".", expand=True)[0]
+        
+        return None
