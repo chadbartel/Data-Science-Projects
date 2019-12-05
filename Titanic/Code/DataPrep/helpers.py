@@ -4,6 +4,9 @@ from pandas import read_csv, CategoricalDtype
 from numpy import int32, float64
 from sklearn.preprocessing import LabelEncoder
 
+from missingno import matrix
+from matplotlib.pyplot import tight_layout, show
+
 
 class Titanic:
     """
@@ -46,6 +49,9 @@ class Titanic:
 
         # Initialize decode dictionary
         self.decode_dict = dict()
+
+        # Initialize missing columns
+        self.missing_columns = list()
 
         return None
     
@@ -145,3 +151,37 @@ class Titanic:
             self.data = self.data.drop(column, axis='columns')
         
         return None
+
+    
+    def plot_missing_data(self):
+        """
+        Generate missingno plot of missing data across all columns.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+
+        else:
+            # Plot missing data
+            matrix(self.data)
+            tight_layout()
+            show()
+
+        return None
+    
+
+    def test_for_mcar(self):
+        """
+        Conduct a 'simplified' Little's MCAR test on each missing column.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+
+        else:
+            # Get list of missing columns in data
+            self.missing_columns = self.data.columns[
+                self.data.isnull().any()
+            ].tolist()
