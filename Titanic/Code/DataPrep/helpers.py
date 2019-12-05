@@ -4,35 +4,6 @@ from pandas import read_csv, CategoricalDtype
 from numpy import int32, float64
 from sklearn.preprocessing import LabelEncoder
 
-# titanic_dtypes = {
-#     'PassengerId': int32,
-#     'Survived': int32, 
-#     'Pclass': int32, 
-#     'Name': str,
-#     'Sex': CategoricalDtype(["male", "female"]), 
-#     'Age': float64, 
-#     'SibSp': int32, 
-#     'Parch': int32, 
-#     'Fare': float64, 
-#     'Embarked': CategoricalDtype(["C", "Q", "S"])
-# }
-
-# def get_titanic_data(train_or_test: str='train'):
-#     """"""
-#     if train_or_test == 'train':
-#         filepath = r'Titanic\Data\Raw\train.csv'
-#     elif train_or_test == 'test':
-#         filepath = r'Titanic\Data\Raw\test.csv'
-#     else:
-#         raise ValueError
-#     df = read_csv(
-#         filepath,
-#         index_col='PassengerId',
-#         usecols=list(titanic_dtypes.keys()),
-#         dtype=titanic_dtypes
-#     )
-#     return df
-
 
 class Titanic:
     """
@@ -75,28 +46,6 @@ class Titanic:
 
         # Initialize decode dictionary
         self.decode_dict = dict()
-
-        # if self.name == 'train':
-        #     # Get Titanic train data
-        #     self.data = read_csv(
-        #         r'Titanic\Data\Raw\train.csv',
-        #         index_col='PassengerId',
-        #         usecols=list(self.dtypes_.keys()),
-        #         dtype=self.dtypes_
-        #     )
-
-        # elif self.name == 'test':
-        #     # Get Titanic test data
-        #     self.data = read_csv(
-        #         r'Titanic\Data\Raw\test.csv',
-        #         index_col='PassengerId',
-        #         usecols=list(self.dtypes_.keys()),
-        #         dtype=self.dtypes_
-        #     )
-        
-        # else:
-        #     # No data
-        #     self.data = None
 
         return None
     
