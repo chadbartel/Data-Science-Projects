@@ -13,6 +13,10 @@ from sklearn.model_selection import KFold
 def score_impute_strategies(data, imp_target:str, columns: list, 
     estimators: list, scorer: str, n_splits: int=5, max_iter: int=10, 
     simple_strats: list=['mean', 'median'], groups=None):
+    """
+    Given a Pandas DataFrame where the target variable is in the first column,
+    calculate the score of each type of imputation strategy passed.
+    """
 
     # Separate X and y arrays
     X_full = data.loc[data[imp_target].notnull()][columns].iloc[:, 1:]
