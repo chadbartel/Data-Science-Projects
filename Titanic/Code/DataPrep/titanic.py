@@ -70,7 +70,7 @@ class Titanic:
             raise ValueError
         
         if column in self.data.columns.tolist():
-            self.data = self.data.drop(column)
+            self.data = self.data.drop([column], axis='columns')
         
         return None
     
@@ -115,18 +115,23 @@ class Titanic:
         
         if self.data is None:
             # No data in object
-            return -1
+            raise ValueError
 
-        else:
-            # Drop 'Ticket' column 
-            #   Does not add value, no valuable pattern found
+        # Drop 'Ticket' column 
+        #   Does not add value, no valuable pattern found
+        try:
             self.drop_column('Ticket')
+        except KeyError:
+            raise KeyError
 
-            # Drop 'Cabin' column
-            #   Too many missing values > 20%, impute inherently biased
+        # Drop 'Cabin' column
+        #   Too many missing values > 20%, impute inherently biased
+        try:
             self.drop_column('Cabin')
+        except KeyError:
+            raise KeyError
 
-            return None
+        return None
 
 
     def encode_labels(self, column: str, drop: bool=False):
