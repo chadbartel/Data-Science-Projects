@@ -5,6 +5,9 @@ from numpy import int32, float64
 from sklearn.preprocessing import LabelEncoder
 from scipy.stats import ttest_ind
 
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+
 from missingno import matrix
 from matplotlib.pyplot import tight_layout, show
 
@@ -57,6 +60,21 @@ class Titanic:
         return None
     
 
+    def drop_column(self, column: str):
+        """
+        Drops a column from data attribute.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+        
+        if column in self.data.columns.tolist():
+            self.data = self.data.drop(column)
+        
+        return None
+    
+
     def get_data(self, name: str=None):
         """
         Gets train/test Titanic data from csv.
@@ -102,11 +120,11 @@ class Titanic:
         else:
             # Drop 'Ticket' column 
             #   Does not add value, no valuable pattern found
-            self.data = self.data.drop(['Ticket'], axis=1)
+            self.data = self.drop_column('Ticket')
 
             # Drop 'Cabin' column
             #   Too many missing values > 20%, impute inherently biased
-            self.data = self.data.drop(['Cabin'], axis=1)
+            self.data = self.drop_column('Cabin')
 
             return None
 
@@ -149,7 +167,7 @@ class Titanic:
         
         if drop:
             # Drop encoded column
-            self.data = self.data.drop(column, axis='columns')
+            self.drop_column(column)
         
         return None
 
@@ -238,4 +256,45 @@ class Titanic:
         self.data['Title'] = self.data['Name'].str.split(
             ", ", expand=True)[1].str.split(".", expand=True)[0]
         
+        return None
+
+
+    def impute_values(self, estimator, column: str, max_iter: int, 
+        drop: bool=False):
+        """
+        Impute values for a column using the given estimator.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+
+        # Get numeric columns only
+        columns = self.data.select_dtypes('number').columns.tolist()
+
+        if column not in columns:
+            # Column must be numeric
+            raise ValueError
+
+        # Create new column name
+        new_column = column + '_Impute'
+
+        # Create iterative imputer
+        imp = IterativeImputer(
+            estimator=estimator,
+            max_iter=max_iter
+        )
+
+        # Fit imputer
+        imp.fit(self.data[columns])
+
+        # Set imputed values to new field
+        self.data[new_column] = imp.transform(
+            self.data[columns]
+        )[:, columns.index(column)]
+        
+        if drop:
+            # Drop non-imputed column
+            self.drop_column(column)
+
         return None
