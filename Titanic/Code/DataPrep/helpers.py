@@ -4,34 +4,34 @@ from pandas import read_csv, CategoricalDtype
 from numpy import int32, float64
 from sklearn.preprocessing import LabelEncoder
 
-titanic_dtypes = {
-    'PassengerId': int32,
-    'Survived': int32, 
-    'Pclass': int32, 
-    'Name': str,
-    'Sex': CategoricalDtype(["male", "female"]), 
-    'Age': float64, 
-    'SibSp': int32, 
-    'Parch': int32, 
-    'Fare': float64, 
-    'Embarked': CategoricalDtype(["C", "Q", "S"])
-}
+# titanic_dtypes = {
+#     'PassengerId': int32,
+#     'Survived': int32, 
+#     'Pclass': int32, 
+#     'Name': str,
+#     'Sex': CategoricalDtype(["male", "female"]), 
+#     'Age': float64, 
+#     'SibSp': int32, 
+#     'Parch': int32, 
+#     'Fare': float64, 
+#     'Embarked': CategoricalDtype(["C", "Q", "S"])
+# }
 
-def get_titanic_data(train_or_test: str='train'):
-    """"""
-    if train_or_test == 'train':
-        filepath = r'Titanic\Data\Raw\train.csv'
-    elif train_or_test == 'test':
-        filepath = r'Titanic\Data\Raw\test.csv'
-    else:
-        raise ValueError
-    df = read_csv(
-        filepath,
-        index_col='PassengerId',
-        usecols=list(titanic_dtypes.keys()),
-        dtype=titanic_dtypes
-    )
-    return df
+# def get_titanic_data(train_or_test: str='train'):
+#     """"""
+#     if train_or_test == 'train':
+#         filepath = r'Titanic\Data\Raw\train.csv'
+#     elif train_or_test == 'test':
+#         filepath = r'Titanic\Data\Raw\test.csv'
+#     else:
+#         raise ValueError
+#     df = read_csv(
+#         filepath,
+#         index_col='PassengerId',
+#         usecols=list(titanic_dtypes.keys()),
+#         dtype=titanic_dtypes
+#     )
+#     return df
 
 
 class Titanic:
@@ -70,27 +70,33 @@ class Titanic:
             # Invalid name passed
             self.name = None
 
-        if self.name == 'train':
-            # Get Titanic train data
-            self.data = read_csv(
-                r'Titanic\Data\Raw\train.csv',
-                index_col='PassengerId',
-                usecols=list(self.dtypes_.keys()),
-                dtype=self.dtypes_
-            )
+        # Initialize data
+        self.data = None
 
-        elif self.name == 'test':
-            # Get Titanic test data
-            self.data = read_csv(
-                r'Titanic\Data\Raw\test.csv',
-                index_col='PassengerId',
-                usecols=list(self.dtypes_.keys()),
-                dtype=self.dtypes_
-            )
+        # Initialize decode dictionary
+        self.decode_dict = dict()
+
+        # if self.name == 'train':
+        #     # Get Titanic train data
+        #     self.data = read_csv(
+        #         r'Titanic\Data\Raw\train.csv',
+        #         index_col='PassengerId',
+        #         usecols=list(self.dtypes_.keys()),
+        #         dtype=self.dtypes_
+        #     )
+
+        # elif self.name == 'test':
+        #     # Get Titanic test data
+        #     self.data = read_csv(
+        #         r'Titanic\Data\Raw\test.csv',
+        #         index_col='PassengerId',
+        #         usecols=list(self.dtypes_.keys()),
+        #         dtype=self.dtypes_
+        #     )
         
-        else:
-            # No data
-            self.data = None
+        # else:
+        #     # No data
+        #     self.data = None
 
         return None
     
@@ -170,10 +176,18 @@ class Titanic:
 
         else:
             # Encode labels in column
-            encoder = LabelEncoder()
-            self.data[new_column] = encoder.fit_transform(
+            _encoder = LabelEncoder()
+            self.data[new_column] = _encoder.fit_transform(
                 self.data[column].astype(str)
             )
+        
+        # Create dictionary to decode labels
+        self.decode_dict[column] = dict(
+            zip(
+                list(_encoder.transform(_encoder.classes_)),
+                list(_encoder.classes_)
+            )
+        )
         
         if drop:
             # Drop encoded column
