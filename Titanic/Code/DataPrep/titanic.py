@@ -264,8 +264,8 @@ class Titanic:
         return None
 
 
-    def impute_values(self, estimator, column: str, max_iter: int, 
-        drop: bool=False):
+    def impute_values(self, estimator, column: str, columns: list, 
+        max_iter: int, drop: bool=False):
         """
         Impute values for a column using the given estimator.
         """
@@ -273,9 +273,6 @@ class Titanic:
         if self.data is None:
             # No data in object
             raise ValueError
-
-        # Get numeric columns only
-        columns = self.data.select_dtypes('number').columns.tolist()
 
         if column not in columns:
             # Column must be numeric
