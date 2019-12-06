@@ -302,7 +302,7 @@ class Titanic:
         return None
     
     
-    def get_target_correlation(self, var: str, target: str="Survived"):
+    def get_target_correlation(self, var: str=None, target: str="Survived"):
         """
         Returns a pivot table showing correlation of a variable on the target.
         """
@@ -311,7 +311,7 @@ class Titanic:
             # No data in object
             raise ValueError
 
-        if var not in self.data.columns.tolist():
+        if var is not None and var not in self.data.columns.tolist():
             # Column does not exist
             raise ValueError
 
@@ -322,5 +322,8 @@ class Titanic:
         if self.data[var].dtype == 'float64':
             # Variable is not discrete
             raise ValueError
+        
+        if var is None:
+            return self.data[[target]].mean()
         
         return self.data[[var, target]].groupby(var, as_index=False).mean()
