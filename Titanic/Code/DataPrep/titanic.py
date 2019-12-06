@@ -300,3 +300,27 @@ class Titanic:
             self.drop_column(column)
 
         return None
+    
+    
+    def get_target_correlation(self, var: str, target: str="Survived"):
+        """
+        Returns a pivot table showing correlation of a variable on the target.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+
+        if var not in self.data.columns.tolist():
+            # Column does not exist
+            raise ValueError
+
+        if target not in self.data.columns.tolist():
+            # Column does not exist
+            raise ValueError
+        
+        if self.data[var].dtype == 'float64':
+            # Variable is not discrete
+            raise ValueError
+        
+        return self.data[[var, target]].groupby(var, as_index=False).mean()
