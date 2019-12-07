@@ -335,3 +335,48 @@ class Titanic:
             return self.data[[target]].mean()
         
         return self.data[[var, target]].groupby(var, as_index=False).mean()
+    
+
+    def plot_value_counts(self, column: str):
+        """
+        Returns a barplot of frequency counts for a column.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+
+        if column not in self.data.columns.tolist():
+            # Column does not exist
+            raise ValueError
+
+        _x = self.data[column].value_counts().index.tolist()
+        _y = self.data[column].value_counts().values.tolist()
+
+        _, ax = plt.subplots()
+        plt.bar(_x, _y)
+
+        for i, j in zip(_x, _y):
+            ax.annotate('{} ({:.1f}%)'.format(
+                j, (j/self.data.shape[0])*100), xy=(i, j)
+            )
+
+        plt.show()
+
+        return None
+
+
+    def get_value_counts(self, column: str, normalize: bool=False):
+        """
+        Returns a Pandas Series object of value counts for a column.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+
+        if column not in self.data.columns.tolist():
+            # Column does not exist
+            raise ValueError
+
+        return self.data[column].value_counts(normalize=normalize)
