@@ -192,7 +192,7 @@ class Titanic:
             _x = self.data.isnull().sum().index.tolist()
             _y = self.data.isnull().sum().values.tolist()
 
-            fig, ax = plt.subplots()
+            _, ax = plt.subplots()
             plt.bar(_x, _y)
 
             for i, j in zip(_x, _y):
