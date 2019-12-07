@@ -179,7 +179,7 @@ class Titanic:
     
     def plot_missing_data(self):
         """
-        Generate missingno plot of missing data across all columns.
+        Generate bar plot of missing data across all columns.
         """
         
         if self.data is None:
@@ -188,9 +188,16 @@ class Titanic:
 
         else:
             # Plot missing data
-            matrix(self.data)
-            tight_layout()
-            show()
+            _x = titanic.data.isnull().sum().index.tolist()
+            _y = titanic.data.isnull().sum().values.tolist()
+
+            fig, ax = plt.subplots()
+            plt.bar(_x, _y)
+
+            for i, j in zip(_x, _y):
+                ax.annotate(str(j), xy=(i, j))
+
+            plt.show()
 
         return None
     
