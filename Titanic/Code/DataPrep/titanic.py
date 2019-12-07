@@ -4,6 +4,7 @@ from pandas import read_csv, CategoricalDtype
 from numpy import int32, float64
 from sklearn.preprocessing import LabelEncoder
 from scipy.stats import ttest_ind
+import matplotlib.pyplot as plt
 
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
@@ -188,8 +189,8 @@ class Titanic:
 
         else:
             # Plot missing data
-            _x = titanic.data.isnull().sum().index.tolist()
-            _y = titanic.data.isnull().sum().values.tolist()
+            _x = self.data.isnull().sum().index.tolist()
+            _y = self.data.isnull().sum().values.tolist()
 
             fig, ax = plt.subplots()
             plt.bar(_x, _y)
