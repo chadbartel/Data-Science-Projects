@@ -1,10 +1,14 @@
 #! usr/env/bin python
 
 from pandas import read_csv, CategoricalDtype
-from numpy import int32, float64
+from numpy import int32, float64, zeros_like, triu_indices_from
+from numpy import bool as npbool
 from sklearn.preprocessing import LabelEncoder
 from scipy.stats import ttest_ind
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import gcf
+from seaborn import heatmap
+from seaborn import diverging_palette
 
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
@@ -380,3 +384,44 @@ class Titanic:
             raise ValueError
 
         return self.data[column].value_counts(normalize=normalize)
+    
+
+    def get_correlation_heatmap(self, columns: list, method: str='pearson', 
+        annot: bool=True, cmap: str=None):
+        """
+        Returns Matplotlib figure object of correlation heatmap.
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+        
+        for column in columns:
+            if column not in self.data.columns.tolist():
+                # Column does not exist
+                raise ValueError
+        
+        if cmap is None:
+            cmap = diverging_palette(220, 10, as_cmap=True)
+        
+        # Compute correlation matrix
+        corr = self.data[columns].corr(method=method)
+
+        # Generate mask for upper triangle
+        mask = zeros_like(corr, dtype=npbool)
+        mask[triu_indices_from(mask)] = True
+        
+        # Draw heatmap figure
+        heatmap(
+            corr,
+            mask=mask,
+            cmap=cmap,
+            vmax=1.,
+            vmin=-1,
+            center=0,
+            square=True,
+            annot=annot
+        )
+        fig = gcf()
+        
+        return fig
