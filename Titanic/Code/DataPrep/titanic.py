@@ -422,6 +422,5 @@ class Titanic:
             square=True,
             annot=annot
         )
-        fig = gcf()
         
-        return fig
+        return None
