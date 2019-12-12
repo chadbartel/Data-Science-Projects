@@ -1,4 +1,4 @@
-# Titanic - Experiment 09
+# Titanic
 
 ## Introduction
 
