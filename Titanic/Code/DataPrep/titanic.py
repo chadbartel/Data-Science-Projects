@@ -6,7 +6,6 @@ from numpy import bool as npbool
 from sklearn.preprocessing import LabelEncoder
 from scipy.stats import ttest_ind
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import gcf
 from seaborn import heatmap
 from seaborn import diverging_palette
 
@@ -387,7 +386,7 @@ class Titanic:
     
 
     def get_correlation_heatmap(self, columns: list, method: str='pearson', 
-        annot: bool=True, cmap: str=None):
+        annot: bool=True, cmap: str=None, set_size_inches: tuple=None):
         """
         Returns Matplotlib figure object of correlation heatmap.
         """
@@ -420,7 +419,12 @@ class Titanic:
             vmin=-1,
             center=0,
             square=True,
-            annot=annot
+            annot=annot,
+            linewidths=0.2
         )
+
+        fig = plt.gcf()
+        fig.set_size_inches(set_size_inches)
+        plt.show()
         
         return None
