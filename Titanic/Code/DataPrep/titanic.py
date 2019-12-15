@@ -3,6 +3,9 @@
 from pandas import read_csv, CategoricalDtype
 from numpy import int32, float64, zeros_like, triu_indices_from
 from numpy import bool as npbool
+from numpy import mean, std
+from numpy.random import choice
+from scipy.stats import trim_mean, median_absolute_deviation
 from sklearn.preprocessing import LabelEncoder
 from scipy.stats import ttest_ind
 import matplotlib.pyplot as plt
@@ -428,3 +431,49 @@ class Titanic:
         plt.show()
         
         return None
+    
+
+    def calculate_bootstrap_statistic(self, column:str, size: int, 
+        statistic: str='mean', bootstraps: int=30):
+        """
+        """
+        
+        if self.data is None:
+            # No data in object
+            raise ValueError
+        
+        if column not in self.data.columns.tolist():
+            # Column does not exist
+            raise ValueError
+        
+        valid_statistics = ['mean', 'std', 'trimmedmean', 'mad']
+        if statistic not in valid_statistics:
+            # Unrecognized statistic
+            raise ValueError
+        
+        statistics = []
+        if statistic == 'mean':
+            for _ in bootstraps:
+                sample = choice(self.data[column].values, size=size)
+                stat = mean(sample)
+                statistics.append(stat)
+
+        elif statistic == 'std':
+            for _ in bootstraps:
+                sample = choice(self.data[column].values, size=size)
+                stat = std(sample)
+                statistics.append(stat)
+        
+        elif statistic == 'trimmedmean':
+            for _ in bootstraps:
+                sample = choice(self.data[column].values, size=size)
+                stat = trim_mean(sample, 0.1)
+                statistics.append(stat)
+
+        else:
+            for _ in bootstraps:
+                sample = choice(self.data[column].values, size=size)
+                stat = median_absolute_deviation(sample, axis=None)
+                statistics.append(stat)
+
+        return statistics
