@@ -29,6 +29,8 @@ The following list describes each of the columns available in the data sets prov
         * C = Cherbourg
         * Q = Queenstown
         * S = Southampton
+    * Name: First name, last name, and title of passenger
+        * {Last Name}, {Title} {First Name}
   * Numerical
     * Survival: Integer boolean indicating if passenger survived - target variable
         * 0 = No
