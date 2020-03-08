@@ -1,4 +1,5 @@
 # [Titanic: Machine Learning from Disaster](https://www.kaggle.com/c/titanic)
+###### Python version 3.6.8 (64-bit)
 
 ## Introduction
 
