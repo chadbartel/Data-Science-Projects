@@ -6,3 +6,7 @@ test.py
 
 # Ignore pycache dirs
 __pycache__
+
+
+# Virtual environment
+/env
