@@ -100,5 +100,6 @@ visions==0.4.4
 wcwidth==0.2.5
 webencodings==0.5.1
 widgetsnbextension==3.5.1
+xgboost==1.2.0
 xlrd==1.2.0
 zipp==3.1.0
