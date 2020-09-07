@@ -9,3 +9,6 @@ __pycache__
 
 # Virtual environment
 /python
+
+# VSCode Docker settings
+/.devcontainer
